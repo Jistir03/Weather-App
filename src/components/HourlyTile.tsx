@@ -1,5 +1,6 @@
 import { formatHour } from '@/lib/formatDate'
 import type { HourlyItem } from '@/types/weather'
+import { WeatherIcon } from '@/components/icons/WeatherIcon'
 
 interface HourlyTileProps {
   item: HourlyItem
@@ -15,8 +16,7 @@ export function HourlyTile({ item, isCurrentHour }: HourlyTileProps) {
       }`}
     >
       <span className="text-xs text-muted-foreground">{formatHour(item.time)}</span>
-      {/* WeatherIcon sm — filled in Story 4.2 */}
-      <div className="h-10 w-10 rounded-full bg-muted" aria-hidden="true" />
+      <WeatherIcon condition={item.condition} size="sm" />
       <span className="text-sm font-medium">{item.temp}°C</span>
     </div>
   )

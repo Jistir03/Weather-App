@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge'
 import { formatDay } from '@/lib/formatDate'
 import type { ForecastDay } from '@/types/weather'
+import { WeatherIcon } from '@/components/icons/WeatherIcon'
 
 interface ForecastRowProps {
   day: ForecastDay
@@ -13,8 +14,7 @@ export function ForecastRow({ day, isToday }: ForecastRowProps) {
       <span className={`text-sm ${isToday ? 'font-bold' : 'text-muted-foreground'}`}>
         {isToday ? 'Today' : formatDay(day.date)}
       </span>
-      {/* WeatherIcon sm — filled in Story 4.2 */}
-      <div className="h-8 w-8 rounded-full bg-muted" aria-hidden="true" />
+      <WeatherIcon condition={day.condition} size="sm" />
       <span className="text-sm">
         <span className="font-medium">{day.tempHigh}°</span>
         <span className="text-muted-foreground"> / {day.tempLow}°</span>

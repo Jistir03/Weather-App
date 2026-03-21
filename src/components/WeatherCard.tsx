@@ -2,6 +2,7 @@ import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { mapConditionCode } from '@/lib/mapConditionCode'
 import type { WeatherData } from '@/types/weather'
+import { WeatherIcon } from '@/components/icons/WeatherIcon'
 
 interface WeatherCardProps {
   data: WeatherData | null
@@ -36,8 +37,7 @@ export function WeatherCard({ data, isLoading }: WeatherCardProps) {
         {data.city}, {data.country}
       </div>
       <div className="text-5xl md:text-7xl font-bold">{data.temp}°C</div>
-      {/* WeatherIcon slot — filled in Story 4.2 */}
-      <div className="h-24 w-24 bg-muted rounded-full" />
+      <WeatherIcon condition={condition} size="lg" />
       <div className="text-xl text-muted-foreground capitalize">{data.description}</div>
       <div className="flex gap-6 text-sm text-muted-foreground">
         <span>Humidity: {data.humidity}%</span>
