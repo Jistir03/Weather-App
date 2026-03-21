@@ -5,6 +5,7 @@ import { HourlyForecast } from './components/HourlyForecast'
 import { FiveDayForecast } from './components/FiveDayForecast'
 import { LastUpdated } from './components/LastUpdated'
 import { SearchBar } from './components/SearchBar'
+import { ErrorState } from './components/ErrorState'
 import { ThemeToggle } from './components/ThemeToggle'
 import { useGeolocation } from './hooks/useGeolocation'
 import { useWeather } from './hooks/useWeather'
@@ -51,34 +52,43 @@ function App() {
     )
   }
 
+  const { data, forecast, error, lastUpdated, isLoading } = weather
+
   return (
     <AppLayout
       header={
-        <div className="flex items-center gap-2">
-          <SearchBar
-            onSearch={handleSearch}
-            onLocationRequest={handleLocationRequest}
-            isSearching={isSearching}
-            isLocationLoading={isGeoLoading}
-          />
-          <ThemeToggle />
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <SearchBar
+              onSearch={handleSearch}
+              onLocationRequest={handleLocationRequest}
+              isSearching={isSearching}
+              isLocationLoading={isGeoLoading}
+            />
+            <ThemeToggle />
+          </div>
+          {error?.type === 'city-not-found' && <ErrorState error={error} />}
         </div>
       }
       left={
-        <div className="space-y-2">
-          <WeatherCard data={weather.data} isLoading={weather.isLoading} />
-          <LastUpdated lastUpdated={weather.lastUpdated} />
-        </div>
+        error && error.type !== 'city-not-found' ? (
+          <ErrorState error={error} />
+        ) : (
+          <div className="space-y-2">
+            <WeatherCard data={data} isLoading={isLoading} />
+            <LastUpdated lastUpdated={lastUpdated} />
+          </div>
+        )
       }
       right={
         <div className="space-y-4">
           <HourlyForecast
-            items={weather.forecast?.hourly ?? []}
-            isLoading={weather.isLoading}
+            items={forecast?.hourly ?? []}
+            isLoading={isLoading}
           />
           <FiveDayForecast
-            days={weather.forecast?.daily ?? []}
-            isLoading={weather.isLoading}
+            days={forecast?.daily ?? []}
+            isLoading={isLoading}
           />
         </div>
       }
