@@ -13,7 +13,7 @@ export function HourlyForecast({ items, isLoading }: HourlyForecastProps) {
 
   if (isLoading && items.length === 0) {
     return (
-      <Card>
+      <Card className="overflow-visible">
         <CardHeader>
           <CardTitle className="text-sm">Hourly Forecast</CardTitle>
         </CardHeader>
@@ -35,7 +35,7 @@ export function HourlyForecast({ items, isLoading }: HourlyForecastProps) {
   if (items.length === 0) return null
 
   return (
-    <Card>
+    <Card className="overflow-visible">
       <CardHeader>
         <CardTitle className="text-sm">Hourly Forecast</CardTitle>
       </CardHeader>
