@@ -81,6 +81,16 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+
+    /* Condition accent tokens (UX-DR1) */
+    --condition-clear: hsl(38, 92%, 50%);
+    --condition-partly-cloudy: hsl(208, 79%, 51%);
+    --condition-cloudy: hsl(215, 25%, 52%);
+    --condition-rain: hsl(204, 70%, 45%);
+    --condition-snow: hsl(195, 53%, 79%);
+    --condition-storm: hsl(237, 47%, 38%);
+    --condition-fog: hsl(220, 14%, 55%);
+    --condition-night: hsl(236, 72%, 25%);
 }
 
 .dark {
@@ -115,6 +125,24 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer components {
+  /* Condition accent classes — 4px left border (UX-DR2) */
+  .condition-clear         { border-left: 4px solid var(--condition-clear); }
+  .condition-partly-cloudy { border-left: 4px solid var(--condition-partly-cloudy); }
+  .condition-cloudy        { border-left: 4px solid var(--condition-cloudy); }
+  .condition-rain          { border-left: 4px solid var(--condition-rain); }
+  .condition-snow          { border-left: 4px solid var(--condition-snow); }
+  .condition-storm         { border-left: 4px solid var(--condition-storm); }
+  .condition-fog           { border-left: 4px solid var(--condition-fog); }
+  .condition-night         { border-left: 4px solid var(--condition-night); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [class*="condition-"] {
+      transition: border-color 700ms ease;
+    }
+  }
 }
 
 @layer base {
