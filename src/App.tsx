@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import AppLayout from './components/AppLayout'
 import { WeatherCard } from './components/WeatherCard'
 import { HourlyForecast } from './components/HourlyForecast'
+import { FiveDayForecast } from './components/FiveDayForecast'
 import { useGeolocation } from './hooks/useGeolocation'
 import { useWeather } from './hooks/useWeather'
 
@@ -18,10 +19,16 @@ function App() {
       header={<p className="text-muted-foreground text-sm">Weather App</p>}
       left={<WeatherCard data={weather.data} isLoading={weather.isLoading} />}
       right={
-        <HourlyForecast
-          items={weather.forecast?.hourly ?? []}
-          isLoading={weather.isLoading}
-        />
+        <div className="space-y-4">
+          <HourlyForecast
+            items={weather.forecast?.hourly ?? []}
+            isLoading={weather.isLoading}
+          />
+          <FiveDayForecast
+            days={weather.forecast?.daily ?? []}
+            isLoading={weather.isLoading}
+          />
+        </div>
       }
     />
   )
