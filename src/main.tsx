@@ -5,8 +5,6 @@ import App from './App.tsx'
 import ErrorBoundary from './components/ErrorBoundary.tsx'
 import { ThemeProvider } from './context/ThemeContext.tsx'
 
-document.documentElement.classList.add('dark')
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
