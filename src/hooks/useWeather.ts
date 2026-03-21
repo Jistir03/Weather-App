@@ -61,14 +61,18 @@ export function useWeather(location: LocationInput | null): WeatherHookResult {
           setIsLoading(false)
           lastUpdatedRef.current = now
         }
-      } catch (err) {
+      } catch (err: unknown) {
         if (!cancelled) {
-          setError(
-            typeof err === 'object' && err !== null && 'type' in err
-              ? (err as WeatherError)
-              : ({ type: 'api-error' } satisfies WeatherError),
-          )
-          setIsLoading(false)
+          if (!isBackground) {
+            // Initial load or user-initiated search failed — surface the error
+            setError(
+              typeof err === 'object' && err !== null && 'type' in err
+                ? (err as WeatherError)
+                : ({ type: 'api-error' } satisfies WeatherError),
+            )
+            setIsLoading(false)
+          }
+          // Background refresh failed — silently discard; existing data remains visible (NFR6)
         }
       } finally {
         inFlightRef.current = false
@@ -81,7 +85,8 @@ export function useWeather(location: LocationInput | null): WeatherHookResult {
     }
 
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && isStale()) {
+      // Re-fetch if stale OR if lastUpdated is null (initial load failed — always retry on focus)
+      if (document.visibilityState === 'visible' && (!lastUpdatedRef.current || isStale())) {
         void fetchData(true)
       }
     }

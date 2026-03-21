@@ -29,11 +29,15 @@ async function fetchWithTimeout<T>(url: string): Promise<T> {
     ) {
       throw { type: 'no-network' } satisfies WeatherError
     }
+    // TypeError: Failed to fetch — device is offline or DNS failure
+    if (err instanceof TypeError) {
+      throw { type: 'no-network' } satisfies WeatherError
+    }
     // Pass through typed WeatherError objects (e.g. thrown by !response.ok)
     if (typeof err === 'object' && err !== null && 'type' in err) {
       throw err
     }
-    // SyntaxError from json(), NetworkError, or other unexpected failures
+    // SyntaxError from json() or other unexpected failures
     throw { type: 'api-error' } satisfies WeatherError
   }
 }
