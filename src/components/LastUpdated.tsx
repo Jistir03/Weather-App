@@ -51,7 +51,7 @@ export function LastUpdated({ lastUpdated }: LastUpdatedProps) {
   return (
     <p
       className={`text-xs ${
-        isStale ? 'text-amber-500 dark:text-amber-400' : 'text-muted-foreground'
+        isStale ? 'text-amber-700 dark:text-amber-400' : 'text-muted-foreground'
       }`}
     >
       {label}

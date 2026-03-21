@@ -12,7 +12,7 @@ interface WeatherCardProps {
 export function WeatherCard({ data, isLoading }: WeatherCardProps) {
   if (isLoading && !data) {
     return (
-      <Card className="p-6 space-y-4 condition-clear" aria-label="Loading weather conditions" aria-busy="true">
+      <Card role="region" className="p-6 space-y-4 condition-clear" aria-label="Loading weather conditions" aria-busy="true">
         <Skeleton className="h-8 w-40" />
         <Skeleton className="h-20 w-48" />
         <Skeleton className="h-6 w-36" />
@@ -30,6 +30,7 @@ export function WeatherCard({ data, isLoading }: WeatherCardProps) {
 
   return (
     <Card
+      role="region"
       className={`p-6 space-y-4 condition-${condition}`}
       aria-label="Current weather conditions"
     >
