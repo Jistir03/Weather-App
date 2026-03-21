@@ -1,23 +1,29 @@
-import { useEffect } from 'react'
+import { useMemo } from 'react'
 import AppLayout from './components/AppLayout'
 import { useGeolocation } from './hooks/useGeolocation'
-import { fetchCurrentWeather } from './services/weatherApi'
+import { useWeather } from './hooks/useWeather'
 
 function App() {
   const geo = useGeolocation()
-
-  // TODO: remove after Story 2.3 API connectivity verification
-  useEffect(() => {
-    if (geo.status === 'success') {
-      fetchCurrentWeather(geo.lat, geo.lon).then(console.log).catch(console.error)
-    }
-  }, [geo])
+  const location = useMemo(
+    () => (geo.status === 'success' ? { lat: geo.lat, lon: geo.lon } : null),
+    [geo],
+  )
+  const weather = useWeather(location)
 
   return (
     <AppLayout
       header={<p className="text-muted-foreground text-sm">Weather App</p>}
-      left={<p className="text-muted-foreground text-sm">Current conditions — geo: {geo.status}</p>}
-      right={<p className="text-muted-foreground text-sm">Forecast</p>}
+      left={
+        <p className="text-muted-foreground text-sm">
+          {weather.isLoading ? 'Loading…' : weather.data?.city ?? 'No data'}
+        </p>
+      }
+      right={
+        <p className="text-muted-foreground text-sm">
+          Forecast days: {weather.forecast?.daily.length ?? 0}
+        </p>
+      }
     />
   )
 }

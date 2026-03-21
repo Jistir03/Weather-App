@@ -145,3 +145,14 @@ export async function fetchWeatherByCity(city: string): Promise<WeatherData> {
   }
   return fetchCurrentWeather(first.lat, first.lon)
 }
+
+export async function fetchGeocode(city: string): Promise<{ lat: number; lon: number }> {
+  const key = getApiKey()
+  const geoUrl = `${BASE_URL}/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=1&appid=${key}`
+  const results = await fetchWithTimeout<OWMGeoResult[]>(geoUrl)
+  const first = results[0]
+  if (!first) {
+    throw { type: 'city-not-found' } satisfies WeatherError
+  }
+  return { lat: first.lat, lon: first.lon }
+}
