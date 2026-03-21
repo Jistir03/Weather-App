@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import AppLayout from './components/AppLayout'
 import { WeatherCard } from './components/WeatherCard'
 import { HourlyForecast } from './components/HourlyForecast'
@@ -15,6 +15,7 @@ function App() {
   const geo = useGeolocation()
   const [location, setLocation] = useState<LocationInput | null>(null)
   const [isGeoLoading, setIsGeoLoading] = useState(false)
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   // Sync initial geolocation result into location state — functional update guards against
   // overwriting a city search if geo resolves after the user has already submitted one
@@ -23,6 +24,16 @@ function App() {
       setLocation(prev => prev === null ? { lat: geo.lat, lon: geo.lon } : prev)
     }
   }, [geo])
+
+  // Auto-focus search input when geolocation is denied (UX-DR16)
+  useEffect(() => {
+    if (geo.status === 'denied') {
+      const id = setTimeout(() => {
+        searchInputRef.current?.focus()
+      }, 100)
+      return () => clearTimeout(id)
+    }
+  }, [geo.status])
 
   const weather = useWeather(location)
 
@@ -44,9 +55,12 @@ function App() {
         setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude })
         setIsGeoLoading(false)
       },
-      () => {
+      (err) => {
         setIsGeoLoading(false)
-        // Story 3.4: handle geolocation denied error
+        // Focus search input only on permission denial, not on timeout/unavailable errors
+        if (err.code === err.PERMISSION_DENIED) {
+          setTimeout(() => searchInputRef.current?.focus(), 100)
+        }
       },
       { timeout: 8000 },
     )
@@ -60,6 +74,7 @@ function App() {
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <SearchBar
+              ref={searchInputRef}
               onSearch={handleSearch}
               onLocationRequest={handleLocationRequest}
               isSearching={isSearching}
