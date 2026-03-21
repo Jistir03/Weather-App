@@ -1,4 +1,5 @@
 export function formatHour(date: Date): string {
+  if (isNaN(date.getTime())) return '—'
   return new Intl.DateTimeFormat('en-US', {
     hour: 'numeric',
     hour12: true,
