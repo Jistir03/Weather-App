@@ -3,6 +3,7 @@ import AppLayout from './components/AppLayout'
 import { WeatherCard } from './components/WeatherCard'
 import { HourlyForecast } from './components/HourlyForecast'
 import { FiveDayForecast } from './components/FiveDayForecast'
+import { LastUpdated } from './components/LastUpdated'
 import { useGeolocation } from './hooks/useGeolocation'
 import { useWeather } from './hooks/useWeather'
 
@@ -17,7 +18,12 @@ function App() {
   return (
     <AppLayout
       header={<p className="text-muted-foreground text-sm">Weather App</p>}
-      left={<WeatherCard data={weather.data} isLoading={weather.isLoading} />}
+      left={
+        <div className="space-y-2">
+          <WeatherCard data={weather.data} isLoading={weather.isLoading} />
+          <LastUpdated lastUpdated={weather.lastUpdated} />
+        </div>
+      }
       right={
         <div className="space-y-4">
           <HourlyForecast
