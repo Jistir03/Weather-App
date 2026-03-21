@@ -8,9 +8,10 @@ interface SearchBarProps {
   onSearch: (city: string) => void
   onLocationRequest: () => void
   isSearching: boolean
+  isLocationLoading: boolean
 }
 
-export function SearchBar({ onSearch, onLocationRequest, isSearching }: SearchBarProps) {
+export function SearchBar({ onSearch, onLocationRequest, isSearching, isLocationLoading }: SearchBarProps) {
   const [value, setValue] = useState('')
   const trimmed = value.trim()
 
@@ -47,7 +48,7 @@ export function SearchBar({ onSearch, onLocationRequest, isSearching }: SearchBa
           <Search className="h-4 w-4" />
         )}
       </Button>
-      <LocationButton onClick={onLocationRequest} isLoading={false} />
+      <LocationButton onClick={onLocationRequest} isLoading={isLocationLoading} />
     </form>
   )
 }

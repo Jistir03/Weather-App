@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState, useEffect } from 'react'
 import AppLayout from './components/AppLayout'
 import { WeatherCard } from './components/WeatherCard'
 import { HourlyForecast } from './components/HourlyForecast'
@@ -8,22 +8,47 @@ import { SearchBar } from './components/SearchBar'
 import { ThemeToggle } from './components/ThemeToggle'
 import { useGeolocation } from './hooks/useGeolocation'
 import { useWeather } from './hooks/useWeather'
+import type { LocationInput } from './hooks/useWeather'
 
 function App() {
-  const [isSearching, setIsSearching] = useState(false)
   const geo = useGeolocation()
-  const location = useMemo(
-    () => (geo.status === 'success' ? { lat: geo.lat, lon: geo.lon } : null),
-    [geo],
-  )
+  const [location, setLocation] = useState<LocationInput | null>(null)
+  const [isGeoLoading, setIsGeoLoading] = useState(false)
+
+  // Sync initial geolocation result into location state — functional update guards against
+  // overwriting a city search if geo resolves after the user has already submitted one
+  useEffect(() => {
+    if (geo.status === 'success') {
+      setLocation(prev => prev === null ? { lat: geo.lat, lon: geo.lon } : prev)
+    }
+  }, [geo])
+
   const weather = useWeather(location)
 
-  const handleSearch = (_city: string) => {
-    setIsSearching(false) // Story 3.2: setIsSearching(true) → fetch → setIsSearching(false)
+  // True only during a city-name search, not during the initial geo-based fetch
+  const isSearching = weather.isLoading && location !== null && 'city' in location
+
+  const handleSearch = (city: string) => {
+    setLocation({ city })
   }
 
   const handleLocationRequest = () => {
-    // Re-trigger geolocation — Story 3.2
+    if (!navigator.geolocation) {
+      setIsGeoLoading(false)
+      return
+    }
+    setIsGeoLoading(true)
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude })
+        setIsGeoLoading(false)
+      },
+      () => {
+        setIsGeoLoading(false)
+        // Story 3.4: handle geolocation denied error
+      },
+      { timeout: 8000 },
+    )
   }
 
   return (
@@ -34,6 +59,7 @@ function App() {
             onSearch={handleSearch}
             onLocationRequest={handleLocationRequest}
             isSearching={isSearching}
+            isLocationLoading={isGeoLoading}
           />
           <ThemeToggle />
         </div>
