@@ -4,7 +4,8 @@ A real-time weather application built with React and TypeScript. Features geoloc
 
 **[Live Demo →](https://your-app.vercel.app)** _(link updated after deployment)_
 
-<!-- Screenshot: add docs/screenshot.png after running the app (dark mode, weather data visible, 768px+ width) -->
+![Weather App — Desktop](docs/screenshot.png)
+![Weather App — Mobile](docs/screeenshotMobile.png)
 
 ---
 
