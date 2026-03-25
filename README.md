@@ -2,7 +2,7 @@
 
 A real-time weather application built with React and TypeScript. Features geolocation, city search, animated weather icons, dark/light mode, and auto-refresh — designed as a portfolio project demonstrating clean API integration and component architecture.
 
-**[Live Demo →](https://your-app.vercel.app)** _(link updated after deployment)_
+**[Live Demo →](https://weather-5ih1s25od-jistir03s-projects.vercel.app)**
 
 ![Weather App — Desktop](docs/screenshot.png)
 ![Weather App — Mobile](docs/screeenshotMobile.png)
@@ -94,7 +94,7 @@ The OpenWeatherMap API key is embedded in the client-side JavaScript bundle (thi
 
 1. Log in to [openweathermap.org](https://openweathermap.org)
 2. Go to API keys → Edit your key
-3. Under **Allowed referrers**, add your deployed domain: `https://your-app.vercel.app`
+3. Under **Allowed referrers**, add your deployed domain: `https://weather-5ih1s25od-jistir03s-projects.vercel.app`
 4. Click **Save**
 5. This prevents the key from being used from other domains
 
